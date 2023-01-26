@@ -17,9 +17,10 @@ client = TelegramClient(PHONE, int(API_ID), API_HASH)
 client.start()
 
 
-async def parse_users():
+async def parse_users() -> None:
     """
-    Asynchronously parses users from a Telegram channel specified by the user.
+    Asynchronously parses users from a Telegram channel specified by the user
+    in case the user has valid permissions for the channel.
     """
     channel = input(
         "Please enter the link to the channel you want to parse the users from:"
@@ -52,7 +53,7 @@ async def parse_users():
     html_table = create_html_table(
         all_user_details, ["id", "First name", "Last name", "User name", "Phone"]
     )
-    save_to_file(target_channel.title, html_table, "messages")
+    save_to_file(target_channel.title, html_table, "users")
 
 
 with client:

@@ -3,10 +3,9 @@ A python script for parsing information about users and messages from telegram c
 
 # How to run
 Before running the program you need to create your Telegram Application and get your API credentials.
-Follow the link for detailed instructions.
 [Follow the link for detailed instructions](https://core.telegram.org/api/obtaining_api_id)
 
-To run this program, you will need to have Python and Git installed on your machine.
+To run this program, you will need to have Python and Git installed.
 
 1. Clone the repository from GitHub by running the following command in your command prompt:
 ```

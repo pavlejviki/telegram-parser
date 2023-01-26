@@ -18,7 +18,8 @@ client.start()
 
 async def parse_messages() -> None:
     """
-    Asynchronously parses messages from a Telegram channel specified by the user.
+    Asynchronously parses messages from a Telegram channel specified by the user
+    in case the user has valid permissions for the channel.
     Use total_count_limit variable to set the number of messages you want to parse
     in case you don't want all of them or parsing all takes too much time
     (if set to 0 all messages will be parsed).
@@ -61,9 +62,7 @@ async def parse_messages() -> None:
         if total_count_limit != 0 and total_messages >= total_count_limit:
             break
 
-    html_table = create_html_table(
-        all_messages, ["id", "Text", "Sender", "Date"]
-    )
+    html_table = create_html_table(all_messages, ["id", "Text", "Sender", "Date"])
     save_to_file(target_channel.title, html_table, "messages")
 
 
