@@ -1,6 +1,11 @@
 __pycache__/
 .git/
-*.sw[op]
 .env
+.DS_Store
+.idea/*
+venv
+.ipynb_checkpoints
+.projectignore
 *.session
-*.sqlite
+*.html
+*.ipynb
