@@ -1,10 +1,11 @@
 import os
 
-import pandas as pd
 from telethon.sync import TelegramClient
 from telethon.tl.functions.channels import GetParticipantsRequest
 from telethon.tl.types import ChannelParticipantsSearch
 from dotenv import load_dotenv
+
+from utils import create_html_table, save_to_file
 
 load_dotenv()
 
@@ -14,27 +15,6 @@ PHONE = os.getenv("PHONE")
 
 client = TelegramClient(PHONE, int(API_ID), API_HASH)
 client.start()
-
-
-def create_html_table(data: list, columns: list) -> str:
-    """
-    Creates an HTML table from a list of data and a list of column names.
-    """
-    df = pd.DataFrame(
-        data,
-        columns=columns,
-    )
-    html_table = df.to_html(index=False)
-    return html_table
-
-
-def save_to_file(title: str, table: str) -> None:
-    """
-    Saves an HTML table to a file with the specified name.
-    """
-    with open(f"{title}-members.html", "w", encoding="UTF-8") as f:
-        f.write(table)
-    print("You file with user's data is ready.")
 
 
 async def parse_users():
@@ -72,7 +52,7 @@ async def parse_users():
     html_table = create_html_table(
         all_user_details, ["id", "First name", "Last name", "User name", "Phone"]
     )
-    save_to_file(target_channel.title, html_table)
+    save_to_file(target_channel.title, html_table, "messages")
 
 
 with client:

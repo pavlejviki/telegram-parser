@@ -1,9 +1,10 @@
 import os
+
 from telethon import TelegramClient
 from telethon.tl.functions.messages import GetHistoryRequest
 from dotenv import load_dotenv
 
-from parse_users import create_html_table, save_to_file
+from utils import create_html_table, save_to_file
 
 load_dotenv()
 
@@ -15,7 +16,13 @@ client = TelegramClient(PHONE, int(API_ID), API_HASH)
 client.start()
 
 
-async def main():
+async def parse_messages() -> None:
+    """
+    Asynchronously parses messages from a Telegram channel specified by the user.
+    Use total_count_limit variable to set the number of messages you want to parse
+    in case you don't want all of them or parsing all takes too much time
+    (if set to 0 all messages will be parsed).
+    """
     channel = input(
         "Please enter the link to the channel you want to parse the messages from:"
     )
@@ -23,8 +30,9 @@ async def main():
     target_channel = await client.get_entity(channel)
 
     offset_id = 0
-    limit = 1000
+    limit = 100
     all_messages = []
+    total_count_limit = 1000
 
     while True:
         history = await client(
@@ -43,19 +51,21 @@ async def main():
             break
         messages = history.messages
         for message in messages:
-            id = message.id
+            message_id = message.id
             text = message.message
             sender = message.from_id
-            receiver = message.to_id
             date = message.date
-            all_messages.append([id, text, sender, receiver, date])
+            all_messages.append([message_id, text, sender, date])
         offset_id = messages[len(messages) - 1].id
+        total_messages = len(all_messages)
+        if total_count_limit != 0 and total_messages >= total_count_limit:
+            break
 
     html_table = create_html_table(
-        all_messages, ["id", "Text", "Sender", "Receiver", "Date"]
+        all_messages, ["id", "Text", "Sender", "Date"]
     )
-    save_to_file(html_table, target_channel.title)
+    save_to_file(target_channel.title, html_table, "messages")
 
 
 with client:
-    client.loop.run_until_complete(main())
+    client.loop.run_until_complete(parse_messages())
